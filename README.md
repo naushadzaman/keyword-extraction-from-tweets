@@ -1,6 +1,9 @@
 # keyword-extraction-from-tweets
 keyword extraction from tweets using python 
+
+
 In this module, we use Pattern tools to do POS tagging/Phrase extraction of tweets. The usual POS tagging/chunking tools do not work well for free form texts like tweets, so we needed to use a tool that is designed and trained for twitter/tweets. From Pattern tool output, we extract phrases as entities. You can decide to use on NP (Noun Phrase), but our default is to use NP (Noun Phrase) and ADJP (Adjective Phrase). With this tool, you can also extract hashtags, usernames, urls from the tweet. 
+
 
 Questions, comments, feedbacks: n@uzzaman.com, @naushadzaman.
 
