@@ -6,6 +6,7 @@ __author__      = "Naushad UzZaman (@naushadzaman)"
 import os 
 import re 
 import sys 
+import string
 import subprocess
 
 
@@ -20,7 +21,11 @@ stopwords = [u'i', u'me', u'my', u'myself', u'we', u'our', u'ours', u'ourselves'
 def extract_link(text):
 	regex = r'https?://[^\s<>"]+|www\.[^\s<>)"]+'
 	match = re.findall(regex, text)
-	return match
+	links = [] 
+	for x in match: 
+		if x[-1] in string.punctuation: links.append(x[:-1])
+		else: links.append(x)
+	return links
 	
 def cleanup(query): 
 	try:
@@ -129,7 +134,7 @@ def extract_users(text, to_normalize=True):
 	
 	
 if __name__ == '__main__':	
-	queries = ["The mobile web is more important than mobile apps.", "As a #roadmapscholar, I highly recommend #startup bootcamp for #founders by @andrewsroadmaps : http://t.co/ZBISIMEBRH http://t.co/VF5CojRWNF", "RT @andrewsroadmaps: Proud of @naushadzaman &amp; @WasimKhal for winning the #IBMWatson hackathon! #roadmapscholars https://t.co/08sbAjKWKu"]
+	queries = ["The mobile web is more important than mobile apps.", "As a #roadmapscholar, I highly recommend #startup bootcamp for #founders by @andrewsroadmaps : http://t.co/ZBISIMEBRH (http://t.co/VF5CojRWNF)", "RT @andrewsroadmaps: Proud of @naushadzaman &amp; @WasimKhal for winning the #IBMWatson hackathon! #roadmapscholars https://t.co/08sbAjKWKu."]
 	
 	for query in queries: 
 		print 'query', query 
