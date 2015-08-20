@@ -16,7 +16,7 @@ $ pip install -r requirements.txt
 
 or you can directly just install Patterm
 ```python
-pip install Pattern
+$ pip install Pattern
 ```
 
 
