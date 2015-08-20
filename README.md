@@ -7,42 +7,57 @@ Questions, comments, feedbacks: n@uzzaman.com, @naushadzaman.
 
 # Install requirements (Pattern)
 Pattern: http://www.clips.ua.ac.be/pattern
+```python
 $ pip install -r requirements.txt
+```
 
 # Examples
+```python
 $ python 
+```
 
 ## Sample keyword extraction
+```python
 >>> import keyword_extraction_w_parser
 >>> query = "The mobile web is more important than mobile apps."
 >>> keyword_extraction_w_parser.get_keywords(query)
 [u'mobile web', u'mobile apps', u'important']
+```
 
 If we want to extract only the NP (Noun Phrase). 
+```python
 >>> keyword_extraction_w_parser.get_keywords(query, ['NP'])
 [u'mobile web', u'mobile apps']
+```
 
 Another example: 
+```python
 >>> query = "As a #roadmapscholar, I highly recommend #startup bootcamp for #founders by @andrewsroadmaps : http://t.co/ZBISIMEBRH http://t.co/VF5CojRWNF"
 >>> keyword_extraction_w_parser.get_keywords(query)
 [u'roadmapscholar', u'startup bootcamp', u'founders']
+```
 
 ## Sample extraction of other entities 
 For tweets, hashtags, usernames, urls are obvious entities that we might need to extract. We provide that functionality as well. 
 
 Extract hashtags:
+```python
 >>> query = "As a #roadmapscholar, I highly recommend #startup bootcamp for #founders by @andrewsroadmaps : http://t.co/ZBISIMEBRH http://t.co/VF5CojRWNF"
 >>> keyword_extraction_w_parser.extract_hashtag(query) 
 ['#roadmapscholar', '#startup', '#founders']
+```
 
 Extract usernames (twitter handles): 
+```python
 >>> query = "RT @andrewsroadmaps: Proud of @naushadzaman &amp; @WasimKhal for winning the #IBMWatson hackathon! #roadmapscholars https://t.co/08sbAjKWKu"
 >>> keyword_extraction_w_parser.extract_users(query)
 ['@andrewsroadmaps', '@naushadzaman', '@wasimkhal']
+```
 
 Extract urls/links: 
+```python
 >>> query = "As a #roadmapscholar, I highly recommend #startup bootcamp for #founders by @andrewsroadmaps : http://t.co/ZBISIMEBRH http://t.co/VF5CojRWNF"
 >>> keyword_extraction_w_parser.extract_link(query)
 ['http://t.co/ZBISIMEBRH', 'http://t.co/VF5CojRWNF']
-
+```
 
