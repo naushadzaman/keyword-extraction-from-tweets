@@ -14,6 +14,12 @@ Pattern: http://www.clips.ua.ac.be/pattern
 $ pip install -r requirements.txt
 ```
 
+or you can directly just install Patterm
+```python
+pip install Pattern
+```
+
+
 # Examples
 ```python
 $ python 
