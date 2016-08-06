@@ -7,8 +7,13 @@ import os
 import re 
 import sys 
 import string
+import codecs 
 import subprocess
 
+filepath = os.path.abspath(os.path.dirname(__file__))
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
 
 from pattern.en import parse
 
@@ -91,6 +96,7 @@ def get_entities_from_phrase(tagged_sent, phrase2consider):
 	bio_tags = [normalise(x.split('/')[0])+ '\t'+ x.split('/')[2] for x in word]
 	bio_text = '\n'.join(bio_tags)
 	mention2entities = extract_entity(bio_text)
+	print mention2entities.keys() 
 	
 	## strip off unacceptable words 
 	_mention2entities = {} 
@@ -111,8 +117,11 @@ def get_entities_from_phrase(tagged_sent, phrase2consider):
 
 def get_keywords(text, phrase2consider=['NP', 'ADJP']): 
 	_text = cleanup(text)
-	postoks, tagged_sent = get_pos_tags(_text)
-	entities = get_entities_from_phrase(tagged_sent, phrase2consider)
+	try:
+		postoks, tagged_sent = get_pos_tags(_text)
+		entities = get_entities_from_phrase(tagged_sent, phrase2consider)
+	except: 
+		return []
 	return entities
 
 ### END Keyword extraction ### 
@@ -125,13 +134,50 @@ def extract_hashtag(text, to_normalize=True):
 	return match
 
 def extract_users(text, to_normalize=True):
-	regex = r'@[^\W\d_]+\b'
+#	regex = r'@[^\W\d_]+\b'
+	regex = r'@[^\b ]+\b'
 	if to_normalize: text = normalise(text)
 	match = re.findall(regex, text)
 	return match
 
-### END other entity extraction ### 
+
+def get_emoji_list():
+	emoji_text = codecs.open(filepath+'/emoji_table.txt', 'r', 'utf-8').read().split('\n')
+	emojis = [x.split(',')[0] for x in emoji_text][1:]
+	emojis = [x for x in emojis if x.strip() != '']
+	return emojis
+emojis = get_emoji_list()
+
+def extract_emojis(text): 
+	global emojis
+	_emos = [] 
+	for each in emojis: 
+		each = each.strip() 
+		if each == '': continue
+		if each in text: 
+			_emos.extend(re.findall(each, text.decode('utf-8')))
 	
+#	_emos2 = []
+#	for char in text.decode('utf-8'): 
+#		if char in _emos: 
+#			_emos2.append(char)		
+	return _emos#, _emos2 
+	
+### END other entity extraction ### 
+
+def all_entities(text, to_normalize=True, with_unigram=True): 
+	text = text.decode('utf-8')
+	if to_normalize: text = normalise(text)
+	if with_unigram: 
+		entities = text.split()
+	else: 
+		entities = [] 
+	keywords = get_keywords(text, ['NP', 'VP', 'ADJP', 'ADVP'])
+	emojis = extract_emojis(text)
+	for each in keywords+emojis: 
+		if not each in entities:
+			entities.append(each)
+	return entities
 	
 if __name__ == '__main__':	
 	queries = ["The mobile web is more important than mobile apps.", "As a #roadmapscholar, I highly recommend #startup bootcamp for #founders by @andrewsroadmaps : http://t.co/ZBISIMEBRH (http://t.co/VF5CojRWNF)", "RT @andrewsroadmaps: Proud of @naushadzaman &amp; @WasimKhal for winning the #IBMWatson hackathon! #roadmapscholars https://t.co/08sbAjKWKu."]
